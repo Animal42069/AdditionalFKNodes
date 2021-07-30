@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HS2_AdditionalFKNodes", "HS2_AdditionalFKNodes\HS2_AdditionalFKNodes.csproj", "{04010460-5BC8-41CF-9FE5-AB0D9EC0917D}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ToolBox", "ToolBox\ToolBox.shproj", "{4C78E869-7E5D-45D7-BA57-914FAE935D31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AI_AdditionalFKNodes", "AI_AdditionalFKNodes\AI_AdditionalFKNodes.csproj", "{909B79CF-D856-45DE-A3B5-4F1D90776A05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KK_AdditionalFKNodes", "KK_AdditionalFKNodes\KK_AdditionalFKNodes.csproj", "{548E15C1-F33D-4C2A-B357-80CC7CF8C8C2}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		ToolBox\ToolBox.projitems*{04010460-5bc8-41cf-9fe5-ab0d9ec0917d}*SharedItemsImports = 4
+		ToolBox\ToolBox.projitems*{4c78e869-7e5d-45d7-ba57-914fae935d31}*SharedItemsImports = 13
+		ToolBox\ToolBox.projitems*{548e15c1-f33d-4c2a-b357-80cc7cf8c8c2}*SharedItemsImports = 4
+		ToolBox\ToolBox.projitems*{909b79cf-d856-45de-a3b5-4f1d90776a05}*SharedItemsImports = 4
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{04010460-5BC8-41CF-9FE5-AB0D9EC0917D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04010460-5BC8-41CF-9FE5-AB0D9EC0917D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04010460-5BC8-41CF-9FE5-AB0D9EC0917D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04010460-5BC8-41CF-9FE5-AB0D9EC0917D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{909B79CF-D856-45DE-A3B5-4F1D90776A05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{909B79CF-D856-45DE-A3B5-4F1D90776A05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{909B79CF-D856-45DE-A3B5-4F1D90776A05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{909B79CF-D856-45DE-A3B5-4F1D90776A05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{548E15C1-F33D-4C2A-B357-80CC7CF8C8C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{548E15C1-F33D-4C2A-B357-80CC7CF8C8C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{548E15C1-F33D-4C2A-B357-80CC7CF8C8C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{548E15C1-F33D-4C2A-B357-80CC7CF8C8C2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {74CFB5BC-FB94-4849-BC64-AE072BFAEA8F}
+	EndGlobalSection
+EndGlobal
