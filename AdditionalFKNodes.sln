@@ -11,11 +11,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AI_AdditionalFKNodes", "AI_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KK_AdditionalFKNodes", "KK_AdditionalFKNodes\KK_AdditionalFKNodes.csproj", "{548E15C1-F33D-4C2A-B357-80CC7CF8C8C2}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AdditionalFKNodes", "AdditionalFKNodes\AdditionalFKNodes.shproj", "{4D226B9E-2E53-4530-A5D6-B273CD24129F}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		AdditionalFKNodes\AdditionalFKNodes.projitems*{04010460-5bc8-41cf-9fe5-ab0d9ec0917d}*SharedItemsImports = 4
 		ToolBox\ToolBox.projitems*{04010460-5bc8-41cf-9fe5-ab0d9ec0917d}*SharedItemsImports = 4
 		ToolBox\ToolBox.projitems*{4c78e869-7e5d-45d7-ba57-914fae935d31}*SharedItemsImports = 13
+		AdditionalFKNodes\AdditionalFKNodes.projitems*{4d226b9e-2e53-4530-a5d6-b273cd24129f}*SharedItemsImports = 13
+		AdditionalFKNodes\AdditionalFKNodes.projitems*{548e15c1-f33d-4c2a-b357-80cc7cf8c8c2}*SharedItemsImports = 4
 		ToolBox\ToolBox.projitems*{548e15c1-f33d-4c2a-b357-80cc7cf8c8c2}*SharedItemsImports = 4
+		AdditionalFKNodes\AdditionalFKNodes.projitems*{909b79cf-d856-45de-a3b5-4f1d90776a05}*SharedItemsImports = 4
 		ToolBox\ToolBox.projitems*{909b79cf-d856-45de-a3b5-4f1d90776a05}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
