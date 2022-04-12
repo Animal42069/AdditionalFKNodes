@@ -17,7 +17,7 @@ namespace AI_AdditionalFKNodes
     {
         internal const string GUID = "com.animal42069.additionalfknodes";
         internal const string PluginName = "AI Additional FK Nodes";
-        internal const string VERSION = "1.2.0.0";
+        internal const string VERSION = "1.2.1.0";
 
         private static Type _uncensorSelectorType;
 

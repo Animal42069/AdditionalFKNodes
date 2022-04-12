@@ -267,16 +267,11 @@ namespace AdditionalFKNodes
                     syncBoneDictionary.Add(newInfoBoneInfo.no, targetInfo);
                 }
 #endif
-
-                
             }
 
             fKCtrlInfo.fkCtrl.count = fKCtrlInfo.fkCtrl.listBones.Count;
             for (int partIndex = 0; partIndex < FKCtrl.parts.Count(); partIndex++)
                 fKCtrlInfo.ociChar.ActiveFK(FKCtrl.parts[partIndex], fKCtrlInfo.ociChar.oiCharInfo.activeFK[partIndex], false);
-
-            if (fKCtrlInfo.info != null)
-                fKCtrlInfo.ociChar.ActiveKinematicMode(OICharInfo.KinematicMode.FK, fKCtrlInfo.info.enableFK, true);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace KK_AdditionalFKNodes
     {
         internal const string GUID = "com.animal42069.additionalfknodes";
         internal const string PluginName = "KK Additional FK Nodes";
-        internal const string VERSION = "1.2.0.0";
+        internal const string VERSION = "1.2.1.0";
 
         private static Type _uncensorSelectorType;
 
@@ -40,21 +40,21 @@ namespace KK_AdditionalFKNodes
             MethodInfo uncensorSelectorReloadCharacterBody = AccessTools.Method(uncensorSelectorControllerType, "ReloadCharacterBody");
             if (uncensorSelectorReloadCharacterBody != null)
             {
-                harmony.Patch(uncensorSelectorReloadCharacterBody, postfix: new HarmonyMethod(GetType(), nameof(AdditionalFKNodes_AddBodyNodes)));
+                harmony.Patch(uncensorSelectorReloadCharacterBody, postfix: new HarmonyMethod(GetType(), nameof(AddAdditionalBodyNodes)));
                 UnityEngine.Debug.Log("AdditionalFKNodes: UncensorSelector patched ReloadCharacterBody correctly");
             }
 
             MethodInfo uncensorSelectorReloadCharacterPenis = AccessTools.Method(uncensorSelectorControllerType, "ReloadCharacterPenis");
             if (uncensorSelectorReloadCharacterPenis != null)
             {
-                harmony.Patch(uncensorSelectorReloadCharacterPenis, postfix: new HarmonyMethod(GetType(), nameof(AdditionalFKNodes_AddPenisNodes)));
+                harmony.Patch(uncensorSelectorReloadCharacterPenis, postfix: new HarmonyMethod(GetType(), nameof(AddAdditionalPenisNodes)));
                 UnityEngine.Debug.Log("AdditionalFKNodes: UncensorSelector patched ReloadCharacterPenis correctly");
             }
 
             MethodInfo uncensorSelectorReloadCharacterBalls = AccessTools.Method(uncensorSelectorControllerType, "ReloadCharacterBalls");
             if (uncensorSelectorReloadCharacterBalls != null)
             {
-                harmony.Patch(uncensorSelectorReloadCharacterBalls, postfix: new HarmonyMethod(GetType(), nameof(AdditionalFKNodes_AddBallNodes)));
+                harmony.Patch(uncensorSelectorReloadCharacterBalls, postfix: new HarmonyMethod(GetType(), nameof(AddAdditionalBallNodes)));
                 UnityEngine.Debug.Log("AdditionalFKNodes: UncensorSelector patched ReloadCharacterBalls correctly");
             }
         }
@@ -70,6 +70,25 @@ namespace KK_AdditionalFKNodes
         {
             AdditionalFKNodes.AdditionalFKNodes.AddFKCtrlInfo(_ociChar);
         }
+		
+        [HarmonyPostfix, HarmonyPatch(typeof(OCIChar), "ActiveFK")]
+        internal static void OCICharActiveFK(OCIChar __instance, OIBoneInfo.BoneGroup _group, bool _active)
+        {
+            if (_active)
+                return;
+
+            AdditionalFKNodes.AdditionalFKNodes.ResetFKNodes(__instance.charInfo, _group);
+        }
+
+        [HarmonyPrefix, HarmonyPatch(typeof(FKCtrl), "CopyBone", typeof(OIBoneInfo.BoneGroup))]
+        internal static void TargetInfoCopyBone(FKCtrl __instance, OIBoneInfo.BoneGroup _target)
+        {
+            AdditionalFKNodes.AdditionalFKNodes.ResetFKNodes(__instance.m_Transform.gameObject.GetComponent<ChaControl>(), _target);
+
+            ChaControl chaControl = __instance.m_Transform.gameObject.GetComponent<ChaControl>();
+            if (chaControl == null)
+                return;
+        }
 
         [HarmonyPrefix, HarmonyPatch(typeof(GuideObject), "LateUpdate")]
         internal static bool GuideObjectLateUpdate(GuideObject __instance)
@@ -80,7 +99,7 @@ namespace KK_AdditionalFKNodes
             return true;
         }
 
-        private static void AdditionalFKNodes_AddBodyNodes(object __instance)
+        internal static void AddAdditionalBodyNodes(object __instance)
         {
             ChaControl chaControl = (ChaControl)__instance.GetPrivateProperty("ChaControl");
             if (chaControl == null)
@@ -107,7 +126,7 @@ namespace KK_AdditionalFKNodes
             AdditionalFKNodes.AdditionalFKNodes.AddAdditionalNodes(chaControl, assetBundleName, assetName);
         }
 
-        private static void AdditionalFKNodes_AddPenisNodes(object __instance)
+        internal static void AddAdditionalPenisNodes(object __instance)
         {
             ChaControl chaControl = (ChaControl)__instance.GetPrivateProperty("ChaControl");
             if (chaControl == null)
@@ -130,7 +149,7 @@ namespace KK_AdditionalFKNodes
             AdditionalFKNodes.AdditionalFKNodes.AddAdditionalNodes(chaControl, assetBundleName, assetName);
         }
 
-        private static void AdditionalFKNodes_AddBallNodes(object __instance)
+        internal static void AddAdditionalBallNodes(object __instance)
         {
             ChaControl chaControl = (ChaControl)__instance.GetPrivateProperty("ChaControl");
             if (chaControl == null)
@@ -152,180 +171,5 @@ namespace KK_AdditionalFKNodes
 
             AdditionalFKNodes.AdditionalFKNodes.AddAdditionalNodes(chaControl, assetBundleName, assetName);
         }
-        /*
-                private static void AdditionalFKNodes_AddNodes(ChaControl chaControl, string assetBundleName, string assetName)
-                {
-                    TextAsset textAsset = CommonLib.LoadAsset<TextAsset>(assetBundleName, "additional_fknodes", true);
-                    if (textAsset == null)
-                        return;
-
-                    UnityEngine.Debug.Log("AdditionalFKNodes: Loaded additional_fknodes TextAsset from " + assetBundleName);
-
-                    if (!fkCtrlDictionary.TryGetValue(chaControl.name, out FKCtrlInfo fKCtrlInfo))
-                        return;
-
-                    var boneInfoDictionary = Singleton<Info>.Instance.dicBoneInfo;
-                    if (boneInfoDictionary == null)
-                        return;
-
-                    var newInfoBoneInfoList = new List<Info.BoneInfo>();
-
-                    string[] lines = textAsset.text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (string line in lines)
-                    {
-                        string[] cells = line.Split('\t');
-                        if (cells.Length < 5)
-                            continue;
-                        UnityEngine.Debug.Log("AdditionalFKNodes: Found matching line for asset " + assetName + "\n" + line);
-
-                        int boneInfoKey = int.Parse(cells[0]);
-                        if (!boneInfoDictionary.TryGetValue(boneInfoKey, out var infoBoneInfo))
-                        {
-                            infoBoneInfo = new Info.BoneInfo
-                            {
-                                no = boneInfoKey,
-                                bone = cells[1],
-                                name = cells[2],
-                                group = int.Parse(cells[3]),
-                                level = int.Parse(cells[4])
-                            };
-                            boneInfoDictionary.Add(boneInfoKey, infoBoneInfo);
-                        }
-
-                        newInfoBoneInfoList.Add(infoBoneInfo);
-                    }
-
-                    foreach (var newInfoBoneInfo in newInfoBoneInfoList)
-                    {
-                        GameObject gameObject = null;
-                        IEnumerable<Transform> transforms;
-                        if (newInfoBoneInfo.group >= 7 && newInfoBoneInfo.group <= 9)
-                            transforms = fKCtrlInfo.charReference.GetReferenceInfo(ChaReference.RefObjKey.HeadParent).GetComponentsInChildren<Transform>().Where(x => x.name.Equals(newInfoBoneInfo.bone));
-                        else
-                            transforms = fKCtrlInfo.fkCtrl.transform.GetComponentsInChildren<Transform>().Where(x => x.name.Equals(newInfoBoneInfo.bone));
-
-                        if (transforms.Count() == 0)
-                            continue;
-
-                        for (int transformIndex = transforms.Count()-1; transformIndex >= 0; transformIndex--)
-                        {
-                            if (chaControl != transforms.ElementAt(transformIndex).GetComponentInParent<ChaControl>())
-                                continue;
-
-                            gameObject = transforms.ElementAt(transformIndex).gameObject;
-                        }
-
-                        if (gameObject == null)
-                            continue;
-
-                        OIBoneInfo.BoneGroup targetBoneGroup;
-                        switch (newInfoBoneInfo.group)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                            case 4:
-                                targetBoneGroup = OIBoneInfo.BoneGroup.Body;
-                                break;
-                            case 5:
-                            case 6:
-                                targetBoneGroup = (OIBoneInfo.BoneGroup)(1 << newInfoBoneInfo.group);
-                                break;
-                            case 7:
-                            case 8:
-                            case 9:
-                                targetBoneGroup = OIBoneInfo.BoneGroup.Hair;
-                                break;
-                            case 10:
-                                targetBoneGroup = OIBoneInfo.BoneGroup.Neck;
-                                break;
-                            case 11:
-                            case 12:
-                                targetBoneGroup = OIBoneInfo.BoneGroup.Breast;
-                                break;
-                            case 13:
-                                targetBoneGroup = OIBoneInfo.BoneGroup.Skirt;
-                                break;
-                            default:
-                                targetBoneGroup = (OIBoneInfo.BoneGroup)(1 << newInfoBoneInfo.group);
-                                break;
-                        }
-
-                        if (!fKCtrlInfo.ociChar.oiCharInfo.bones.TryGetValue(newInfoBoneInfo.no, out OIBoneInfo oiboneInfo))
-                        {
-                            oiboneInfo = new OIBoneInfo(Studio.Studio.GetNewIndex())
-                            {
-                                changeAmount = new ChangeAmount(),
-                                treeState = TreeNodeObject.TreeState.Close,
-                                visible = true
-                            };
-                            Studio.Studio.AddChangeAmount(oiboneInfo.dicKey, oiboneInfo.changeAmount);
-                            fKCtrlInfo.ociChar.oiCharInfo.bones.Add(newInfoBoneInfo.no, oiboneInfo);
-                        }
-
-                        oiboneInfo.group = targetBoneGroup;
-                        oiboneInfo.level = newInfoBoneInfo.level;
-
-
-                        OCIChar.BoneInfo charBoneInfo = null;
-                        foreach (var charListBone in fKCtrlInfo.ociChar.listBones)
-                        {
-                            if (charListBone == null)
-                                continue;
-
-                            if (charListBone.boneID == newInfoBoneInfo.no)
-                            {
-                                charBoneInfo = charListBone;
-                                break;
-                            }
-                        }
-
-                        if (charBoneInfo == null || charBoneInfo.guideObject == null)
-                        {
-                            GuideObject guideObject = AddObjectAssist.AddBoneGuide(gameObject.transform, oiboneInfo.dicKey, fKCtrlInfo.ociChar.guideObject, newInfoBoneInfo.name);
-                            OIBoneInfo.BoneGroup group = oiboneInfo.group;
-                            guideObject.scaleSelect = 0.025f;
-                            charBoneInfo = new OCIChar.BoneInfo(guideObject, oiboneInfo, newInfoBoneInfo.no);
-                            fKCtrlInfo.ociChar.listBones.Add(charBoneInfo);
-                            guideObject.SetActive(false, true);
-                            oiboneInfo.changeAmount = guideObject.changeAmount;
-                        }
-                        else
-                        {
-                            GuideObject guideObject = charBoneInfo.guideObject;
-                            guideObject.transformTarget = gameObject.transform;
-                            oiboneInfo.changeAmount = guideObject.changeAmount;
-                        }
-
-                        FKCtrl.TargetInfo targetInfo = null;
-                        foreach (var listBone in fKCtrlInfo.fkCtrl.listBones)
-                        {
-                            if (listBone == null)
-                                continue;
-
-                            if (listBone.m_Transform.name == gameObject.transform.name)
-                            {
-                                targetInfo = listBone;
-                                break;
-                            }
-                        }
-
-                        if (targetInfo == null)
-                        {
-                            targetInfo = new FKCtrl.TargetInfo(gameObject, oiboneInfo.changeAmount, targetBoneGroup, newInfoBoneInfo.level);
-                            fKCtrlInfo.fkCtrl.listBones.Add(targetInfo);
-                        }
-                        else
-                        {
-                            targetInfo.gameObject = gameObject;
-                        }
-                    }
-
-                    fKCtrlInfo.fkCtrl.count = fKCtrlInfo.fkCtrl.listBones.Count;
-                    for (int partIndex = 0; partIndex < FKCtrl.parts.Count(); partIndex++)
-                        fKCtrlInfo.ociChar.ActiveFK(FKCtrl.parts[partIndex], fKCtrlInfo.ociChar.oiCharInfo.activeFK[partIndex], false);
-                    fKCtrlInfo.ociChar.ActiveKinematicMode(OICharInfo.KinematicMode.FK, fKCtrlInfo.info.enableFK, true);
-                }*/
     }
 }
